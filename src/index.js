@@ -16,6 +16,10 @@ type Query {
     users: [User!]
   }
 
+  # type Mutation {
+  #   addBook(title: String, author: String): Book
+  # }
+
   type User {
     id: ID!
     first_name: String!
@@ -28,11 +32,11 @@ type Query {
 `;
 
 
-const me = users[1]
+// const me = users[1]
 
 const resolvers = {
   Query: {
-    me: () => {
+    me: (parent, args, {me}) => {
       return me;
     },
     user: (parent, {
@@ -44,12 +48,21 @@ const resolvers = {
       return Object.values(users);
     }
   },
+  // User: {
+  //   username: user => {
+  //     // console.log('user', user)
+  //     return `${user.first_name} ${user.middle_name} ${user.last_name} `;
+  //   }
+  // }
 };
 
 
 const server = new ApolloServer({
   typeDefs: schema,
-  resolvers
+  resolvers,
+  context: {
+    me: users[1]
+  }
 });
 
 server.applyMiddleware({
