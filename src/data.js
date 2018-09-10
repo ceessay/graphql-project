@@ -1,4 +1,4 @@
-let users = {
+export const users = {
 
   1: {
     id: '1',
@@ -7,7 +7,8 @@ let users = {
     last_name: "Diaho",
     username: "sadiyaa",
     friends: ["mohamed", "sana", "thiaba"],
-    age: 24
+    age: 24,
+    messageIds: [1]
   },
   2: {
     id: '2',
@@ -16,7 +17,9 @@ let users = {
     last_name: "Badji",
     username: "sana16",
     friends: ["mohamed", "sana", "thiaba"],
-    age: 24
+    age: 24,
+    messageIds: [2]
+
   },
   3: {
     id: '3',
@@ -25,8 +28,21 @@ let users = {
     last_name: "Diop",
     username: "mimistic",
     friends: ["mohamed", "sana", "sadiyaa"],
-    age: 24
+    age: 24,
+    messageIds: []
+
   },
 };
 
-export default users
+export const messages = {
+  1: {
+    id: '1',
+    text: 'Hello World',
+    userId: '1',
+  },
+  2: {
+    id: '2',
+    text: 'Bye World',
+    userId: '2',
+  },
+};

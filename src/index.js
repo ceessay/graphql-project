@@ -4,7 +4,11 @@ import {
   gql
 } from "apollo-server-express";
 // import cors from "cors";
-import users from './data';
+import uuidv4 from 'uuid/v4';
+import {
+  users,
+  messages
+} from './data';
 
 const app = express();
 // app.use(cors);
@@ -14,11 +18,14 @@ type Query {
     me: User
     user(id: ID!) : User
     users: [User!]
+
+    messages:[Message!]!
+    message(id: ID!):Message!
   }
 
-  # type Mutation {
-  #   addBook(title: String, author: String): Book
-  # }
+   type Mutation {
+    createMessage(text: String!): Message
+   }
 
   type User {
     id: ID!
@@ -28,7 +35,14 @@ type Query {
     username: String!
     friends: [String!]
     age: Int!
+    messages: [Message!]
   }
+  type Message {
+    id: ID!
+    text: String!
+    user: User!
+  }
+
 `;
 
 
@@ -36,7 +50,9 @@ type Query {
 
 const resolvers = {
   Query: {
-    me: (parent, args, {me}) => {
+    me: (parent, args, {
+      me
+    }) => {
       return me;
     },
     user: (parent, {
@@ -46,14 +62,52 @@ const resolvers = {
     },
     users: () => {
       return Object.values(users);
+    },
+    messages: () => {
+      return Object.values(messages);
+    },
+    message: (parent, {
+      id
+    }) => {
+      return messages[id];
+    },
+
+
+  },
+
+  Mutation: {
+    createMessage: (parent, {
+      text
+    }, {
+      me
+    }) => {
+
+      const id = uuidv4()
+      const message = {
+        id,
+        text,
+        userID: me.id
+      };
+      messages[id] = messages
+      users[me.id].messageIds.push(id);
+
+      return message;
     }
   },
-  // User: {
-  //   username: user => {
-  //     // console.log('user', user)
-  //     return `${user.first_name} ${user.middle_name} ${user.last_name} `;
-  //   }
-  // }
+
+
+  User: {
+    messages: (user) => {
+      return Object.values(messages)
+        .filter(message => message.userId === user.id)
+    }
+  },
+  Message: {
+    user: (message, args) => {
+      // console.log('message', message)
+      return users[message.userId]
+    }
+  }
 };
 
 
