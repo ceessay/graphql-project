@@ -24,7 +24,9 @@ type Query {
   }
 
    type Mutation {
-    createMessage(text: String!): Message
+    createMessage(text: String!): Message!
+    updateMessage(id: ID!, text: String!): Message!
+    deleteMessage (id: ID!): Boolean
    }
 
   type User {
@@ -88,11 +90,35 @@ const resolvers = {
         text,
         userID: me.id
       };
-      messages[id] = messages
+      messages[id] = message
       users[me.id].messageIds.push(id);
-
+      console.log("add messages", messages)
       return message;
-    }
+    },
+
+    deleteMessage: (parent, {
+      id
+    }) => {
+      const {
+        [id]: message, ...otherMessages
+      } = messages
+      if (!message) {
+        console.log("delete not messages", messages.length);
+        return false;
+      }
+      delete messages[id]
+
+      console.log("delete messages", messages);
+      return true;
+    },
+    updateMessage: (parent, {
+      id,
+      text
+    }) => {
+      messages[id].text = text
+      console.log("update messages", messages);
+      return messages[id]
+    },
   },
 
 
