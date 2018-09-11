@@ -1,4 +1,4 @@
-export const users = {
+const users = {
 
   1: {
     id: '1',
@@ -34,7 +34,7 @@ export const users = {
   },
 };
 
-export const messages = {
+const messages = {
   1: {
     id: '1',
     text: 'Hello World',
@@ -46,3 +46,9 @@ export const messages = {
     userId: '2',
   },
 };
+
+
+export default {
+  users,
+  messages
+}
