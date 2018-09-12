@@ -4,20 +4,23 @@ import {
 } from "apollo-server-express";
 // import cors from "cors";
 import uuidv4 from 'uuid/v4';
-import models from './models';
 import schema from "./schema"
 import resolvers from './resolvers'
+import models, {
+  sequelize
+} from './models';
 
 const app = express();
 // app.use(cors);
 
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: {
+  context: async () => ({
     models,
-    me: models.users[1]
-  }
+    me: await models.User.findByLogin('sadiyaa')
+  })
 });
 
 server.applyMiddleware({
@@ -25,8 +28,45 @@ server.applyMiddleware({
   path: "/graphy"
 });
 
-app.listen({
-  port: 8000
-}, () => {
-  console.log("Appolo Server on http://localhost:8000/graphy");
-});
+
+const eraseDatabaseOnSync = false;
+sequelize.sync({
+  force: eraseDatabaseOnSync
+}).then(async () => {
+
+  if (eraseDatabaseOnSync) {
+    createUsersWithMessages();
+  }
+
+  app.listen({
+    port: 8000
+  }, () => {
+    console.log("Appolo Server on http://localhost:8000/graphy");
+  });
+})
+
+
+
+const createUsersWithMessages = async () => {
+  await models.User.create({
+    username: 'sadiyaa',
+    messages: [{
+      text: 'Published the Road to learn React',
+    }, ],
+  }, {
+    include: [models.Message],
+  }, );
+
+  await models.User.create({
+    username: 'ddavids',
+    messages: [{
+        text: 'Happy to release ...',
+      },
+      {
+        text: 'Published a complete ...',
+      },
+    ],
+  }, {
+    include: [models.Message],
+  }, );
+};
