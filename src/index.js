@@ -29,7 +29,7 @@ server.applyMiddleware({
 });
 
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 sequelize.sync({
   force: eraseDatabaseOnSync
 }).then(async () => {
@@ -50,6 +50,7 @@ sequelize.sync({
 const createUsersWithMessages = async () => {
   await models.User.create({
     username: 'sadiyaa',
+    email: 'sadiyaa@gmail.com',
     messages: [{
       text: 'Published the Road to learn React',
     }, ],
@@ -59,6 +60,7 @@ const createUsersWithMessages = async () => {
 
   await models.User.create({
     username: 'ddavids',
+    username: 'ddavids@gmail.com',
     messages: [{
         text: 'Happy to release ...',
       },

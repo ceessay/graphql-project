@@ -12,34 +12,32 @@ const user = (sequelize, DataType) => {
     username: {
       type: DataType.STRING
     },
-    first_name: {
+    email: {
       type: DataType.STRING
-    },
-    middle_name: {
-      type: DataType.STRING
-    },
-    last_name: {
-      type: DataType.STRING
-    },
-    last_name: {
-      type: DataType.INTEGER
-    },
+    }
   })
 
   User.associate = models => {
     User.hasMany(models.Message)
   }
 
-  user.findByLogin = async (login) => {
+  User.findByLogin = async login => {
     let user = await User.findOne({
       where: {
         username: login
-      }
-    })
+      },
+    });
+
+    if (!user) {
+      user = await User.findOne({
+        where: {
+          email: login
+        },
+      });
+    }
 
     return user;
-  }
-
+  };
 
   return User
 }

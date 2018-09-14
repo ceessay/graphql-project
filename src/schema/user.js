@@ -12,12 +12,9 @@ extend type Query {
   }
   type User {
     id: ID!
-    first_name: String!
-    middle_name: String!
-    last_name: String!
     username: String!
-    friends: [String!]
-    age: Int!
+    email: String!
+
     messages: [Message!]
   }
 `;

@@ -13,7 +13,8 @@ export default {
           return await models.User.findById(id)
         },
         me: async (parent, args, {
-            me
+            me,
+            models
           }) => {
             return await models.User.findById(me.id)
           },
