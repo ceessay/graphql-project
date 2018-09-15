@@ -1,9 +1,14 @@
-import models, {sequelize} from '../models';
+import models, {
+  sequelize
+} from '../models';
 
-const message = (sequelize, DataType) => {
+const message = (sequelize, DataTypes) => {
   const Message = sequelize.define('message', {
     text: {
-      type: DataType.STRING
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true
+      },
     },
   })
 

@@ -3,7 +3,7 @@ import 'dotenv/config'
 
 
 const sequelize = new Sequelize(
-  "../../db.sqlite3",
+  "../../db.db",
   null,
   null, {
     dialect: 'sqlite'

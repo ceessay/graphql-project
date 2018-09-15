@@ -1,4 +1,6 @@
 import express from "express";
+import 'dotenv/config'
+
 import {
   ApolloServer,
 } from "apollo-server-express";
@@ -19,7 +21,8 @@ const server = new ApolloServer({
   resolvers,
   context: async () => ({
     models,
-    me: await models.User.findByLogin('sadiyaa')
+    me: await models.User.findByLogin('sadiyaa'),
+    secret: process.env.secret
   })
 });
 
@@ -51,6 +54,7 @@ const createUsersWithMessages = async () => {
   await models.User.create({
     username: 'sadiyaa',
     email: 'sadiyaa@gmail.com',
+    password: 'passer',
     messages: [{
       text: 'Published the Road to learn React',
     }, ],
@@ -60,7 +64,8 @@ const createUsersWithMessages = async () => {
 
   await models.User.create({
     username: 'ddavids',
-    username: 'ddavids@gmail.com',
+    email: 'ddavids@gmail.com',
+    password: 'passer',
     messages: [{
         text: 'Happy to release ...',
       },
