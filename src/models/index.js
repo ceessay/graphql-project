@@ -1,36 +1,24 @@
-import Sequelize from 'sequelize';
-import 'dotenv/config'
+import Sequelize from "sequelize";
+import "dotenv/config";
 
-
-const sequelize = new Sequelize(
-  "../../db.db",
-  null,
-  null, {
-    dialect: 'sqlite'
-  }
-
-)
-
-
+const sequelize = new Sequelize("../../db.db", null, null, {
+  dialect: "sqlite"
+});
 
 const models = {
-  User: sequelize.import('./user.js'),
-  Message: sequelize.import('./message.js'),
-}
+  User: sequelize.import("./user.js"),
+  Message: sequelize.import("./message.js")
+};
 
 Object.keys(models).forEach(key => {
-  if ('associate' in models[key]) {
+  if ("associate" in models[key]) {
     models[key].associate(models);
   }
 });
 
-export {
-  sequelize
-}
+export { sequelize };
 
-export default models
-
-
+export default models;
 
 // const users = {
 

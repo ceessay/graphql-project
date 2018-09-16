@@ -1,4 +1,7 @@
-import uuidv4 from 'uuid/v4';
+import uuidv4 from "uuid/v4";
+import { combineResolvers } from "graphql-resolvers";
+
+import { isAuthenticated } from "./authorization";
 
 export default {
   Query: {
@@ -7,25 +10,35 @@ export default {
     },
     message: async (parent, { id }, { models }) => {
       return await models.Message.findById(id);
-    },
+    }
   },
 
   Mutation: {
-    createMessage: async (parent, { text }, { me, models }) => {
-      return await models.Message.create({
-        text,
-        userId: me.id,
-      });
-    },
+    createMessage: combineResolvers(
+      isAuthenticated,
+      async (parent, { text }, { me, models }) => {
+        return await models.Message.create({
+          text,
+          userId: me.id
+        });
+      }
+    ),
 
-    deleteMessage: async (parent, { id }, { models }) => {
-      return await models.Message.destroy({ where: { id } });
-    },
+    deleteMessage: combineResolvers(
+      isAuthenticated,
+      async (parent, { id }, { models }) => {
+        return await models.Message.destroy({
+          where: {
+            id
+          }
+        });
+      }
+    )
   },
 
   Message: {
     user: async (message, args, { models }) => {
       return await models.User.findById(message.userId);
-    },
-  },
+    }
+  }
 };

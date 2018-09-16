@@ -1,10 +1,8 @@
-import {
-  buildSchemaFromTypeDefinitions
-} from "graphql-tools";
-import bcrypt from 'bcrypt';
+import { buildSchemaFromTypeDefinitions } from "graphql-tools";
+import bcrypt from "bcrypt";
 
 const user = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
+  const User = sequelize.define("user", {
     // id: ID!
     // first_name: String!
     // middle_name: String!
@@ -28,35 +26,35 @@ const user = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        isEmail: true,
-      },
+        isEmail: true
+      }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [5, 42],
-      },
-    },
-  })
+        len: [5, 42]
+      }
+    }
+  });
 
   User.associate = models => {
-    User.hasMany(models.Message)
-  }
+    User.hasMany(models.Message);
+  };
 
   User.findByLogin = async login => {
     let user = await User.findOne({
       where: {
         username: login
-      },
+      }
     });
 
     if (!user) {
       user = await User.findOne({
         where: {
           email: login
-        },
+        }
       });
     }
 
@@ -67,15 +65,15 @@ const user = (sequelize, DataTypes) => {
     user.password = await user.generatePasswordHash();
   });
 
-  User.prototype.generatePasswordHash = async function () {
+  User.prototype.generatePasswordHash = async function() {
     const saltRounds = 10;
     return await bcrypt.hash(this.password, saltRounds);
   };
 
-  User.prototype.validatePassword = async function (password) {
+  User.prototype.validatePassword = async function(password) {
     return await bcrypt.compare(password, this.password);
-  }
+  };
 
-  return User
-}
-export default user
+  return User;
+};
+export default user;
