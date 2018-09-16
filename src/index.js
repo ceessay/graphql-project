@@ -70,6 +70,7 @@ const createUsersWithMessages = async () => {
       username: "sadiyaa",
       email: "sadiyaa@gmail.com",
       password: "passer",
+      role: "ADMIN",
       messages: [
         {
           text: "Published the Road to learn React"
@@ -86,12 +87,32 @@ const createUsersWithMessages = async () => {
       username: "ddavids",
       email: "ddavids@gmail.com",
       password: "passer",
+      role: "BASIC",
       messages: [
         {
           text: "Happy to release ..."
         },
         {
           text: "Published a complete ..."
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "sana",
+      email: "sana@gmail.com",
+      password: "passer",
+      role: "BASIC",
+      messages: [
+        {
+          text: "Bonjour ..."
+        },
+        {
+          text: "comment vas-tu ..."
         }
       ]
     },
