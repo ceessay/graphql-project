@@ -15,7 +15,8 @@ const app = express();
 // getme
 
 const getMe = async req => {
-  const token = req.heqder["x-token"];
+  const token = req.headers["x-token"];
+  console.log("request header", req.headers);
 
   if (token) {
     try {
@@ -84,6 +85,26 @@ const createUsersWithMessages = async () => {
 
   await models.User.create(
     {
+      username: "sana",
+      email: "sana@gmail.com",
+      password: "passer",
+      role: "BASIC",
+      messages: [
+        {
+          text: "Bonjour ..."
+        },
+        {
+          text: "comment vas-tu ..."
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+
+  await models.User.create(
+    {
       username: "ddavids",
       email: "ddavids@gmail.com",
       password: "passer",
@@ -103,16 +124,35 @@ const createUsersWithMessages = async () => {
   );
   await models.User.create(
     {
-      username: "sana",
-      email: "sana@gmail.com",
+      username: "ddavids2",
+      email: "ddavids2@gmail.com",
       password: "passer",
       role: "BASIC",
       messages: [
         {
-          text: "Bonjour ..."
+          text: "Happy to release ..."
         },
         {
-          text: "comment vas-tu ..."
+          text: "Published a complete ..."
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "ddavids3",
+      email: "ddavids3@gmail.com",
+      password: "passer",
+      role: "BASIC",
+      messages: [
+        {
+          text: "Happy to release ..."
+        },
+        {
+          text: "Published a complete ..."
         }
       ]
     },
