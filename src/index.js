@@ -149,10 +149,19 @@ const createUsersWithMessages = async () => {
       role: "BASIC",
       messages: [
         {
-          text: "Happy to release ..."
+          text: "kdfjlsdjkflj ..."
         },
         {
-          text: "Published a complete ..."
+          text: "dfkjsldfjl ..."
+        },
+        {
+          text: "oppopipipi ..."
+        },
+        {
+          text: "Happy to release3 ..."
+        },
+        {
+          text: "Published a complete3 ..."
         }
       ]
     },
