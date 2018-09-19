@@ -65,6 +65,9 @@ sequelize
     );
   });
 
+const date = new Date();
+const getCreateDate = () => date.setSeconds(date.getSeconds() + 1);
+
 const createUsersWithMessages = async () => {
   await models.User.create(
     {
@@ -74,7 +77,8 @@ const createUsersWithMessages = async () => {
       role: "ADMIN",
       messages: [
         {
-          text: "Published the Road to learn React"
+          text: "Published the Road to learn React",
+          createdAt: getCreateDate()
         }
       ]
     },
@@ -91,10 +95,12 @@ const createUsersWithMessages = async () => {
       role: "BASIC",
       messages: [
         {
-          text: "Bonjour ..."
+          text: "Bonjour ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "comment vas-tu ..."
+          text: "comment vas-tu ...",
+          createdAt: getCreateDate()
         }
       ]
     },
@@ -111,10 +117,12 @@ const createUsersWithMessages = async () => {
       role: "BASIC",
       messages: [
         {
-          text: "Happy to release ..."
+          text: "Happy to release ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "Published a complete ..."
+          text: "Published a complete ...",
+          createdAt: getCreateDate()
         }
       ]
     },
@@ -130,10 +138,12 @@ const createUsersWithMessages = async () => {
       role: "BASIC",
       messages: [
         {
-          text: "Happy to release ..."
+          text: "Happy to release ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "Published a complete ..."
+          text: "Published a complete ...",
+          createdAt: getCreateDate()
         }
       ]
     },
@@ -149,19 +159,24 @@ const createUsersWithMessages = async () => {
       role: "BASIC",
       messages: [
         {
-          text: "kdfjlsdjkflj ..."
+          text: "kdfjlsdjkflj ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "dfkjsldfjl ..."
+          text: "dfkjsldfjl ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "oppopipipi ..."
+          text: "oppopipipi ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "Happy to release3 ..."
+          text: "Happy to release3 ...",
+          createdAt: getCreateDate()
         },
         {
-          text: "Published a complete3 ..."
+          text: "Published a complete3 ...",
+          createdAt: getCreateDate()
         }
       ]
     },

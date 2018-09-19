@@ -1,3 +1,4 @@
+import Sequelize from "sequelize";
 import uuidv4 from "uuid/v4";
 import { combineResolvers } from "graphql-resolvers";
 
@@ -5,10 +6,22 @@ import { isAuthenticated, isMessageOwner } from "./authorization";
 
 export default {
   Query: {
-    messages: async (parent, { offset = 0, limit = 0 }, { models }) => {
+    messages: async (parent, { cursor, limit = 100 }, { models }) => {
+      cursor ? (cursor = new Date(parseInt(cursor)).toISOString()) : null;
+      const cursorOptions = cursor
+        ? {
+            where: {
+              createdAt: {
+                [Sequelize.Op.lt]: cursor
+              }
+            }
+          }
+        : {};
+
       return await models.Message.findAll({
-        offset,
-        limit
+        order: [["createdAt", "DESC"]],
+        limit,
+        ...cursorOptions
       });
     },
     message: async (parent, { id }, { models }) => {
