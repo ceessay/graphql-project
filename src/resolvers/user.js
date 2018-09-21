@@ -45,7 +45,7 @@ export default {
       });
 
       return {
-        token: await createToken(user, secret, "30m")
+        token: await createToken(user, secret, "1440m")
       };
     },
 
@@ -61,7 +61,7 @@ export default {
         throw new AuthenticationError("Invalid password");
       }
 
-      return await { token: createToken(user, secret, "30m") };
+      return await { token: createToken(user, secret, "1440m") };
     },
 
     deleteUser: combineResolvers(

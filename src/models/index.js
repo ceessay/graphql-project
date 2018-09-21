@@ -1,8 +1,9 @@
 import Sequelize from "sequelize";
 import "dotenv/config";
 
-const sequelize = new Sequelize("../../db.db", null, null, {
-  dialect: "sqlite"
+const sequelize = new Sequelize(null, null, null, {
+  dialect: "sqlite",
+  storage: "../../db.sqlite3"
 });
 
 const models = {
