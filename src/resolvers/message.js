@@ -4,10 +4,18 @@ import { combineResolvers } from "graphql-resolvers";
 
 import { isAuthenticated, isMessageOwner } from "./authorization";
 
+const toCursorHash = string => Buffer.from(string).toString("base64");
+
+const fromCursorHash = string =>
+  Buffer.from(string, "base64").toString("ascii");
+
 export default {
   Query: {
     messages: async (parent, { cursor, limit = 100 }, { models }) => {
-      cursor ? (cursor = new Date(parseInt(cursor)).toISOString()) : null;
+      // console.log("hashh", cursor);
+      // console.log("after unhash", fromCursorHash(cursor));
+      // return;
+      cursor = cursor ? new Date(fromCursorHash(cursor)).toISOString() : null;
       const cursorOptions = cursor
         ? {
             where: {
@@ -20,13 +28,17 @@ export default {
 
       const messages = await models.Message.findAll({
         order: [["createdAt", "DESC"]],
-        limit,
+        limit: limit + 1,
         ...cursorOptions
       });
+
+      const hasNextPage = messages.length > limit;
+      const edges = hasNextPage ? messages.slice(0, -1) : messages;
       return {
-        edges: messages,
+        edges,
         pageInfo: {
-          endCursor: messages[messages.length - 1].createdAt
+          hasNextPage,
+          endCursor: toCursorHash(edges[edges.length - 1].createdAt.toString())
         }
       };
     },
