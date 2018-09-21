@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 
@@ -31,13 +32,20 @@ const getMe = async req => {
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: async ({ req }) => {
-    const me = await getMe(req);
-    return {
-      models,
-      me,
-      secret: process.env.SECRET
-    };
+  context: async ({ req, connection }) => {
+    if (connection) {
+      return {
+        models
+      };
+    }
+    if (req) {
+      const me = await getMe(req);
+      return {
+        models,
+        me,
+        secret: process.env.SECRET
+      };
+    }
   }
 });
 
@@ -45,6 +53,10 @@ server.applyMiddleware({
   app,
   path: "/graphy"
 });
+
+const httpServer = http.createServer(app);
+
+server.installSubscriptionHandlers(httpServer);
 
 const eraseDatabaseOnSync = true;
 sequelize
@@ -55,7 +67,7 @@ sequelize
     if (eraseDatabaseOnSync) {
       createUsersWithMessages();
     }
-    app.listen(
+    httpServer.listen(
       {
         port: 8000
       },
