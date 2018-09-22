@@ -6,9 +6,11 @@ import jwt from "jsonwebtoken";
 import { ApolloServer, AuthenticationError } from "apollo-server-express";
 // import cors from "cors";
 import uuidv4 from "uuid/v4";
+import DataLoader from "dataloader";
 import schema from "./schema";
 import resolvers from "./resolvers";
 import models, { sequelize } from "./models";
+import loaders from "./loaders";
 
 const app = express();
 // app.use(cors);
@@ -35,7 +37,8 @@ const server = new ApolloServer({
   context: async ({ req, connection }) => {
     if (connection) {
       return {
-        models
+        models,
+        user: new DataLoader(keys => loaders.user.batchUsers(keys, models))
       };
     }
     if (req) {
@@ -43,7 +46,8 @@ const server = new ApolloServer({
       return {
         models,
         me,
-        secret: process.env.SECRET
+        secret: process.env.SECRET,
+        user: new DataLoader(keys => loaders.user.batchUsers(keys, models))
       };
     }
   }
@@ -63,13 +67,11 @@ const isTest = !!process.env.TEST_DATABASE;
 console.log("database !!!VERSIONNNNN iztest", isTest);
 sequelize
   .sync({
-    force: isTest
+    force: eraseDatabaseOnSync
   })
   .then(async () => {
     if (eraseDatabaseOnSync) {
-      if (isTest) {
-        createUsersWithMessages();
-      }
+      createUsersWithMessages();
     }
     httpServer.listen(
       {

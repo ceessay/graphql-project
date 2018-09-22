@@ -79,8 +79,8 @@ export default {
   },
 
   Message: {
-    user: async (message, args, { models }) => {
-      return await models.User.findById(message.userId);
+    user: async (message, args, { user }) => {
+      return await user.load(message.userId);
     }
   },
   Subscription: {
