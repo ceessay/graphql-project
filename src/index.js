@@ -59,13 +59,17 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 const eraseDatabaseOnSync = true;
+const isTest = !!process.env.TEST_DATABASE;
+console.log("database !!!VERSIONNNNN iztest", isTest);
 sequelize
   .sync({
-    force: eraseDatabaseOnSync
+    force: isTest
   })
   .then(async () => {
     if (eraseDatabaseOnSync) {
-      createUsersWithMessages();
+      if (isTest) {
+        createUsersWithMessages();
+      }
     }
     httpServer.listen(
       {

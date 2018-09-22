@@ -3,7 +3,9 @@ import "dotenv/config";
 
 const sequelize = new Sequelize(null, null, null, {
   dialect: "sqlite",
-  storage: "../../db.sqlite3"
+  storage: process.env.TEST_DATABASE
+    ? "../../db.test.sqlite3"
+    : "../../db.sqlite3"
 });
 
 const models = {
