@@ -1,1 +1,1 @@
-# Sample node project with Babel and dotenv
+# A project For Learning GraphQL
